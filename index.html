@@ -1,0 +1,1002 @@
+, pi<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AM Signature</title>
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial,sans-serif;
+}
+
+body{
+    background:#f5f6f8;
+    color:#222;
+}
+
+header{
+    background:#111827;
+    color:white;
+    padding:16px 5%;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    position:sticky;
+    top:0;
+    z-index:100;
+}
+
+.logo{
+    font-size:25px;
+    font-weight:bold;
+}
+
+.header-buttons button{
+    border:0;
+    padding:10px 14px;
+    margin-left:6px;
+    border-radius:7px;
+    cursor:pointer;
+    color:white;
+}
+
+.cartBtn{
+    background:#16a34a;
+}
+
+.adminBtn{
+    background:#2563eb;
+}
+
+.hero{
+    background:linear-gradient(135deg,#2563eb,#111827);
+    color:white;
+    text-align:center;
+    padding:65px 20px;
+}
+
+.hero h1{
+    font-size:42px;
+    margin-bottom:10px;
+}
+
+.hero p{
+    font-size:18px;
+}
+
+.container{
+    width:90%;
+    max-width:1200px;
+    margin:40px auto;
+}
+
+.title{
+    text-align:center;
+    margin-bottom:25px;
+    font-size:30px;
+}
+
+.products{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+    gap:22px;
+}
+
+.product{
+    background:white;
+    border-radius:12px;
+    overflow:hidden;
+    box-shadow:0 4px 15px rgba(0,0,0,.08);
+}
+
+.product img{
+    width:100%;
+    height:210px;
+    object-fit:cover;
+}
+
+.product-info{
+    padding:17px;
+}
+
+.product-info h3{
+    margin-bottom:8px;
+}
+
+.price{
+    color:#16a34a;
+    font-size:21px;
+    font-weight:bold;
+    margin:10px 0;
+}
+
+.addBtn{
+    width:100%;
+    padding:12px;
+    background:#2563eb;
+    color:white;
+    border:0;
+    border-radius:7px;
+    cursor:pointer;
+}
+
+.cartBox,
+.adminBox{
+    background:white;
+    padding:25px;
+    margin-top:40px;
+    border-radius:12px;
+    box-shadow:0 4px 15px rgba(0,0,0,.08);
+}
+
+.cartItem{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    border-bottom:1px solid #ddd;
+    padding:14px 0;
+    gap:10px;
+}
+
+.qty button{
+    width:30px;
+    height:30px;
+    border:0;
+    border-radius:5px;
+    cursor:pointer;
+}
+
+.remove{
+    background:#ef4444;
+    color:white;
+    border:0;
+    padding:7px;
+    border-radius:5px;
+    cursor:pointer;
+}
+
+input,
+select,
+textarea{
+    width:100%;
+    padding:12px;
+    border:1px solid #ccc;
+    border-radius:7px;
+    margin:7px 0;
+}
+
+textarea{
+    height:90px;
+}
+
+.formGrid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:10px;
+}
+
+.full{
+    grid-column:1/-1;
+}
+
+.orderBtn,
+.saveBtn{
+    width:100%;
+    padding:14px;
+    border:0;
+    border-radius:7px;
+    color:white;
+    font-size:16px;
+    cursor:pointer;
+}
+
+.orderBtn{
+    background:#16a34a;
+}
+
+.saveBtn{
+    background:#2563eb;
+}
+
+.adminPanel{
+    display:none;
+}
+
+.adminLogin{
+    display:none;
+    background:white;
+    max-width:400px;
+    margin:40px auto;
+    padding:25px;
+    border-radius:12px;
+    box-shadow:0 4px 15px rgba(0,0,0,.1);
+}
+
+.adminLogin h2{
+    margin-bottom:15px;
+}
+
+.adminProduct{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:12px 0;
+    border-bottom:1px solid #ddd;
+}
+
+.logout{
+    background:#ef4444;
+    color:white;
+    border:0;
+    padding:10px 15px;
+    border-radius:7px;
+    cursor:pointer;
+}
+
+footer{
+    margin-top:50px;
+    background:#111827;
+    color:white;
+    text-align:center;
+    padding:25px;
+}
+
+@media(max-width:600px){
+
+    .hero h1{
+        font-size:30px;
+    }
+
+    .formGrid{
+        grid-template-columns:1fr;
+    }
+
+    .full{
+        grid-column:auto;
+    }
+
+    .cartItem{
+        flex-direction:column;
+        align-items:flex-start;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+
+<div class="logo">AM Signature</div>
+
+<div class="header-buttons">
+<button class="cartBtn"
+onclick="document.getElementById('cart').scrollIntoView()">
+🛒 Cart (<span id="cartCount">0</span>)
+</button>
+
+<button class="adminBtn" onclick="showAdminLogin()">
+🔐 Admin
+</button>
+</div>
+
+</header>
+
+
+<section class="hero">
+
+<h1>AM Signature</h1>
+
+<p>Quality Products • Easy Shopping • Cash on Delivery</p>
+
+</section>
+
+
+<!-- PRODUCTS -->
+
+<div class="container">
+
+<h2 class="title">Our Products</h2>
+
+<div class="products" id="products"></div>
+
+</div>
+
+
+<!-- CART -->
+
+<div class="container">
+
+<div class="cartBox" id="cart">
+
+<h2>🛒 Shopping Cart</h2>
+
+<div id="cartItems">
+<p style="margin-top:15px;color:#777;">
+Your cart is empty.
+</p>
+</div>
+
+<h2 style="margin-top:20px;">
+Total: Rs. <span id="total">0</span>
+</h2>
+
+</div>
+
+
+<!-- CHECKOUT -->
+
+<div class="cartBox">
+
+<h2>📦 Delivery Information</h2>
+
+<form onsubmit="placeOrder(event)">
+
+<div class="formGrid">
+
+<input id="customerName"
+placeholder="Full Name"
+required>
+
+<input id="phone"
+placeholder="Phone Number"
+required>
+
+<textarea class="full"
+id="address"
+placeholder="Complete Address"
+required></textarea>
+
+<select id="province" required>
+<option value="">Select Province</option>
+<option>Sindh</option>
+<option>Punjab</option>
+<option>Balochistan</option>
+<option>Khyber Pakhtunkhwa</option>
+<option>Islamabad Capital Territory</option>
+<option>Gilgit-Baltistan</option>
+<option>Azad Kashmir</option>
+</select>
+
+<input id="city"
+placeholder="City"
+required>
+
+<input id="postal"
+placeholder="Postal Code">
+
+<select id="delivery" required>
+<option value="">Select Delivery</option>
+<option>Leopards Courier</option>
+<option>TCS</option>
+<option>M&P</option>
+<option>Pakistan Post</option>
+</select>
+
+<select class="full" id="payment" required>
+<option value="">Payment Method</option>
+<option>Cash on Delivery</option>
+</select>
+
+</div>
+
+<button class="orderBtn" type="submit">
+Place Order
+</button>
+
+</form>
+
+</div>
+
+</div>
+
+
+<!-- ADMIN LOGIN -->
+
+<div class="adminLogin" id="adminLogin">
+
+<h2>🔐 Admin Login</h2>
+
+<input
+type="password"
+id="adminPassword"
+placeholder="Enter Admin Password">
+
+<button class="saveBtn" onclick="adminLogin()">
+Login
+</button>
+
+</div>
+
+
+<!-- ADMIN PANEL -->
+
+<div class="container adminPanel" id="adminPanel">
+
+<div class="adminBox">
+
+<div style="display:flex;justify-content:space-between;align-items:center;gap:10px;">
+<h2>⚙️ Admin Panel</h2>
+
+<button class="logout" onclick="logout()">
+Logout
+</button>
+</div>
+
+<hr style="margin:20px 0;">
+
+<h3>➕ Add New Product</h3>
+
+<input id="productName"
+placeholder="Product Name">
+
+<input id="productPrice"
+type="number"
+placeholder="Product Price">
+
+<input id="productImage"
+placeholder="Product Image URL">
+
+<textarea id="productDescription"
+placeholder="Product Description"></textarea>
+
+<button class="saveBtn" onclick="addProduct()">
+Add Product
+</button>
+
+<hr style="margin:25px 0;">
+
+<h3>📦 Manage Products</h3>
+
+<div id="adminProducts"></div>
+
+<hr style="margin:25px 0;">
+
+<h3>🧾 Orders</h3>
+
+<div id="orders">
+<p style="color:#777;margin-top:10px;">
+No orders yet.
+</p>
+</div>
+
+</div>
+
+</div>
+
+
+<footer>
+
+<p>© 2026 AM Signature — All Rights Reserved</p>
+
+</footer>
+
+
+<script>
+
+/* PRODUCTS */
+
+let products = [
+
+{
+name:"Premium Watch",
+price:3500,
+image:"https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=600",
+description:"Stylish premium watch."
+},
+
+{
+name:"Wireless Headphones",
+price:4999,
+image:"https://images.unsplash.com/photo-1546435770-a3e426bf472b?w=600",
+description:"High quality wireless headphones."
+},
+
+{
+name:"Digital Camera",
+price:25000,
+image:"https://images.unsplash.com/photo-1526170375885-4d8ecf77b99f?w=600",
+description:"Perfect camera for photography."
+},
+
+{
+name:"Premium T-Shirt",
+price:1499,
+image:"https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=600",
+description:"Comfortable casual T-shirt."
+}
+
+];
+
+let cart=[];
+let orders=[];
+
+
+/* SHOW PRODUCTS */
+
+function showProducts(){
+
+let box=document.getElementById("products");
+
+box.innerHTML="";
+
+products.forEach((product,index)=>{
+
+box.innerHTML+=`
+
+<div class="product">
+
+<img src="${product.image}" alt="${product.name}">
+
+<div class="product-info">
+
+<h3>${product.name}</h3>
+
+<p>${product.description}</p>
+
+<div class="price">
+Rs. ${product.price.toLocaleString()}
+</div>
+
+<button class="addBtn"
+onclick="addToCart(${index})">
+
+Add to Cart
+
+</button>
+
+</div>
+
+</div>
+
+`;
+
+});
+
+}
+
+
+/* ADD CART */
+
+function addToCart(index){
+
+let product=products[index];
+
+let existing=cart.find(
+item=>item.name===product.name
+);
+
+if(existing){
+
+existing.qty++;
+
+}else{
+
+cart.push({
+name:product.name,
+price:product.price,
+qty:1
+});
+
+}
+
+updateCart();
+
+alert(product.name+" added to cart!");
+
+}
+
+
+/* UPDATE CART */
+
+function updateCart(){
+
+let box=document.getElementById("cartItems");
+
+let total=0;
+let count=0;
+
+if(cart.length===0){
+
+box.innerHTML=
+'<p style="margin-top:15px;color:#777;">Your cart is empty.</p>';
+
+}else{
+
+box.innerHTML="";
+
+cart.forEach((item,index)=>{
+
+let itemTotal=item.price*item.qty;
+
+total+=itemTotal;
+count+=item.qty;
+
+box.innerHTML+=`
+
+<div class="cartItem">
+
+<div>
+<strong>${item.name}</strong>
+<br>
+Rs. ${item.price.toLocaleString()}
+</div>
+
+<div class="qty">
+
+<button onclick="decrease(${index})">
+−
+</button>
+
+<span style="margin:0 8px;">
+${item.qty}
+</span>
+
+<button onclick="increase(${index})">
++
+</button>
+
+</div>
+
+<strong>
+Rs. ${itemTotal.toLocaleString()}
+</strong>
+
+<button class="remove"
+onclick="removeItem(${index})">
+Remove
+</button>
+
+</div>
+
+`;
+
+});
+
+}
+
+document.getElementById("total").innerText=
+total.toLocaleString();
+
+document.getElementById("cartCount").innerText=count;
+
+}
+
+
+/* QUANTITY */
+
+function increase(index){
+
+cart[index].qty++;
+
+updateCart();
+
+}
+
+
+function decrease(index){
+
+if(cart[index].qty>1){
+
+cart[index].qty--;
+
+}else{
+
+cart.splice(index,1);
+
+}
+
+updateCart();
+
+}
+
+
+function removeItem(index){
+
+cart.splice(index,1);
+
+updateCart();
+
+}
+
+
+/* PLACE ORDER */
+
+function placeOrder(event){
+
+event.preventDefault();
+
+if(cart.length===0){
+
+alert("Please add a product first.");
+
+return;
+
+}
+
+let customer={
+name:document.getElementById("customerName").value,
+phone:document.getElementById("phone").value,
+address:document.getElementById("address").value,
+province:document.getElementById("province").value,
+city:document.getElementById("city").value,
+postal:document.getElementById("postal").value,
+delivery:document.getElementById("delivery").value,
+payment:document.getElementById("payment").value,
+items:[...cart],
+date:new Date().toLocaleString()
+};
+
+orders.push(customer);
+
+let total=cart.reduce(
+(sum,item)=>sum+(item.price*item.qty),0
+);
+
+alert(
+"✅ ORDER PLACED!\n\n"+
+"Name: "+customer.name+"\n"+
+"Phone: "+customer.phone+"\n"+
+"City: "+customer.city+"\n"+
+"Province: "+customer.province+"\n"+
+"Delivery: "+customer.delivery+"\n"+
+"Payment: "+customer.payment+"\n\n"+
+"Total: Rs. "+total.toLocaleString()
+);
+
+cart=[];
+
+updateCart();
+
+showOrders();
+
+}
+
+
+/* ADMIN LOGIN */
+
+function showAdminLogin(){
+
+document.getElementById("adminLogin").style.display="block";
+
+document.getElementById("adminLogin")
+.scrollIntoView();
+
+}
+
+
+function adminLogin(){
+
+let password=
+document.getElementById("adminPassword").value;
+
+if(password==="1234"){
+
+document.getElementById("adminLogin").style.display="none";
+
+document.getElementById("adminPanel").style.display="block";
+
+showAdminProducts();
+
+showOrders();
+
+document.getElementById("adminPanel")
+.scrollIntoView();
+
+}else{
+
+alert("❌ Wrong Password!");
+
+}
+
+}
+
+
+/* ADD PRODUCT */
+
+function addProduct(){
+
+let name=
+document.getElementById("productName").value;
+
+let price=
+Number(document.getElementById("productPrice").value);
+
+let image=
+document.getElementById("productImage").value;
+
+let description=
+document.getElementById("productDescription").value;
+
+if(!name || !price || !image){
+
+alert("Please fill Product Name, Price and Image.");
+
+return;
+
+}
+
+products.push({
+name:name,
+price:price,
+image:image,
+description:description || "Quality product."
+});
+
+document.getElementById("productName").value="";
+document.getElementById("productPrice").value="";
+document.getElementById("productImage").value="";
+document.getElementById("productDescription").value="";
+
+showProducts();
+
+showAdminProducts();
+
+alert("✅ Product added successfully!");
+
+}
+
+
+/* ADMIN PRODUCTS */
+
+function showAdminProducts(){
+
+let box=document.getElementById("adminProducts");
+
+box.innerHTML="";
+
+products.forEach((product,index)=>{
+
+box.innerHTML+=`
+
+<div class="adminProduct">
+
+<div>
+
+<strong>${product.name}</strong>
+
+<br>
+
+Rs. ${product.price.toLocaleString()}
+
+</div>
+
+<button class="remove"
+onclick="deleteProduct(${index})">
+
+Delete
+
+</button>
+
+</div>
+
+`;
+
+});
+
+}
+
+
+/* DELETE PRODUCT */
+
+function deleteProduct(index){
+
+if(confirm("Delete this product?")){
+
+products.splice(index,1);
+
+showProducts();
+
+showAdminProducts();
+
+}
+
+}
+
+
+/* SHOW ORDERS */
+
+function showOrders(){
+
+let box=document.getElementById("orders");
+
+if(orders.length===0){
+
+box.innerHTML=
+'<p style="color:#777;margin-top:10px;">No orders yet.</p>';
+
+return;
+
+}
+
+box.innerHTML="";
+
+orders.forEach((order,index)=>{
+
+let total=order.items.reduce(
+(sum,item)=>sum+(item.price*item.qty),0
+);
+
+box.innerHTML+=`
+
+<div style="
+border:1px solid #ddd;
+padding:15px;
+border-radius:8px;
+margin-top:12px;
+">
+
+<strong>Order #${index+1}</strong>
+
+<p>
+Customer: ${order.name}
+</p>
+
+<p>
+Phone: ${order.phone}
+</p>
+
+<p>
+Address: ${order.address}
+</p>
+
+<p>
+City: ${order.city}
+</p>
+
+<p>
+Province: ${order.province}
+</p>
+
+<p>
+Delivery: ${order.delivery}
+</p>
+
+<p>
+Payment: ${order.payment}
+</p>
+
+<p>
+Total: <strong>
+Rs. ${total.toLocaleString()}
+</strong>
+</p>
+
+<p>
+Date: ${order.date}
+</p>
+
+</div>
+
+`;
+
+});
+
+}
+
+
+/* LOGOUT */
+
+function logout(){
+
+document.getElementById("adminPanel").style.display="none";
+
+alert("Logged out.");
+
+}
+
+
+/* START */
+
+showProducts();
+
+updateCart();
+
+</script>
+
+</body>
+</html>
